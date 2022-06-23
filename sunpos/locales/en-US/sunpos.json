@@ -13,14 +13,19 @@
             "startoffset" : "Start Offset",
             "end"         : "End",
             "endoffset"   : "End Offset",
-            "name"        : "Name"
+            "name"        : "Name",
+            "weekendtime" : "Start Weekend",
+            "weekdaytime" : "Start Weekday",
+            "useweektime" : "Use fixed time as earliest start"
         },
         "placeholder" : {
             "lat"         : "51.025",
             "lon"         : "-1.4",
             "startoffset" : "0",
             "endoffset"   : "0",
-            "name"        : "Name"
+            "name"        : "Name",
+            "weekendtime" : "08:00",
+            "weekdaytime" : "06:00"
         }
     }
 }
