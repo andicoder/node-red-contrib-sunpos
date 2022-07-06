@@ -49,6 +49,18 @@
         <label for="node-input-endoffset"><i class="fa fa-clock-o"></i> <span data-i18n="sunpos.label.endoffset"></span></label>
         <input type="number" id="node-input-endoffset" data-i18n="[placeholder]sunpos.placeholder.endoffset">
     </div>
+	<div class="form-row">
+        <span data-i18n="sunpos.label.useweektime"></span>
+        <input type="checkbox" id="node-input-useweektime" style="display:inline-block; width:15px; vertical-align:baseline;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-weekendtime"><i class="fa fa-clock-o"></i> <span data-i18n="sunpos.label.weekendtime"></span></label>
+        <input type="text" id="node-input-weekendtime" data-i18n="[placeholder]sunpos.placeholder.weekendtime">
+    </div>
+    <div class="form-row">
+        <label for="node-input-weekdaytime"><i class="fa fa-clock-o"></i> <span data-i18n="sunpos.label.weekdaytime"></span></label>
+        <input type="text" id="node-input-weekdaytime" data-i18n="[placeholder]sunpos.placeholder.weekdaytime">
+    </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="sunpos.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]sunpos.placeholder.name">
@@ -76,7 +88,19 @@
             start: {value:"sunrise", required:true},
             startoffset:   {value:0,  required:false},
             end:   {value:"sunset",  required:true},
-            endoffset:   {value:0,  required:false}
+            endoffset:   {value:0,  required:false},
+            weekendtime: {value:"08:00", required:true, 
+                validate: function(v) {
+                    return moment(v, 'HH:mm', true).isValid();
+                }
+            },
+            weekdaytime: {value:"06:00", required:true,
+                validate: function(v) {
+                    var n = String(v)
+                    return moment(n, 'HH:mm', true).isValid();
+                }
+            },
+            useweektime: {value: "", required: false}
         },
         inputs: 1,
         outputs: 1,

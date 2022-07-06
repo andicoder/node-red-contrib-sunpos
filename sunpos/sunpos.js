@@ -16,6 +16,7 @@
 module.exports = function(RED) {
   "use strict";
   var SunCalc = require("suncalc");
+  var moment = require("moment");
 
   function getSunPosition(config) {
     RED.nodes.createNode(this, config);
@@ -24,7 +25,10 @@ module.exports = function(RED) {
       start: config.start,
       startOffset: config.startoffset,
       end: config.end,
-      endOffset: config.endoffset
+      endOffset: config.endoffset,
+      weekendDate: moment(config.weekendtime, 'HH:mm').toDate(),
+      weekdayDate: moment(config.weekdaytime, 'HH:mm').toDate(),
+      useweektime: config.useweektime
     };
 
     var location = {
@@ -39,14 +43,21 @@ module.exports = function(RED) {
 
       var sunPosition = SunCalc.getPosition(now, location.lat, location.lon);
       var sunTimes = SunCalc.getTimes(now, location.lat, location.lon);
+
+      const weekday = moment().format('E');
+      const isWeekend = weekday === '6' || weekday === '7';
+      var userDate = isWeekend ? stConfig.weekendDate : stConfig.weekdayDate;
+
       var altitudeDegrees = 180 / Math.PI * sunPosition.altitude;
       var azimuthDegrees = 180 + 180 / Math.PI * sunPosition.azimuth;
 
       var nowMillis = now.getTime();
-      var startMillis =
-        sunTimes[stConfig.start].getTime() + stConfig.startOffset * 60000;
+
+      var startTime = sunTimes[stConfig.start].getTime() + stConfig.startOffset * 60000;
+      var userTime = userDate.getTime()
+      var startMillis = stConfig.useweektime && userTime > startTime ? userTime : startTime;
       var endMillis =
-        sunTimes[stConfig.end].getTime() + stConfig.endOffset * 60000;
+        sunTimes[stConfig.end].getTime() + stConfig.endOffset * 60000
 
       var sunInSky = nowMillis > startMillis && nowMillis < endMillis;
       if (sunInSky) {
